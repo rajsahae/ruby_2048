@@ -26,4 +26,12 @@ class TestRuby2048Game < MiniTest::Unit::TestCase
     g = Grid.new(:prng => prng)
     g.prng.must_equal(prng)
   end
+
+  def test_grid_gives_random_available_tile
+    prng = Random.new(0)
+    g = Grid.new(:prng => prng)
+    c = g.random_cell
+    c.x.must_equal(0)
+    c.y.must_equal(3)
+  end
 end

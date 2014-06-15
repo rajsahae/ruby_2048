@@ -11,15 +11,25 @@ module Ruby2048
         :seed => Random.new_seed
       }.merge(opts)
 
-      @num_start_tiles = opts[:tiles]
+      @start_tiles = opts[:tiles]
       @seed = opts[:seed]
       @prng = Random.new(@seed)
       @grid = Grid.new(:prng => @prng)
+
+      add_start_tiles
     end
-    attr_reader :num_start_tiles, :seed, :grid
+    attr_reader :start_tiles, :seed, :grid
 
     def next_tile
       @prng.rand(1.0) < 0.9 ? 2 : 4
+    end
+
+    private
+    def add_start_tiles
+      @start_tiles.times do
+        cell = @grid.random_cell
+        @grid.insert_tile(next_tile, cell.x, cell.y)
+      end
     end
 
   end
