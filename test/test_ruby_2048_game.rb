@@ -59,4 +59,70 @@ class TestRuby2048Game < MiniTest::Unit::TestCase
     c2.y.must_equal(3)
     c2.value.must_equal(2)
   end
+
+  def test_you_can_make_moves
+    g = Game.new(:seed => 0)
+    g.must_respond_to(:move)
+
+    g = Game.new(:seed => 0)
+    g.move(:down)
+    fc = g.grid.filled_cells
+    p fc
+    c1, c2 = fc
+
+    c1.x.must_equal(0)
+    c1.y.must_equal(3)
+    c1.value.must_equal(4)
+
+    c2.x.must_equal(0)
+    c2.y.must_equal(3)
+    c2.value.must_equal(2)
+
+    g = Game.new(:seed => 0)
+    g.move(:right)
+    p fc
+    fc = g.grid.filled_cells
+    c1, c2, c3 = fc
+
+    c1.x.must_equal(3)
+    c1.y.must_equal(0)
+    c1.value.must_equal(2)
+
+    c2.x.must_equal(3)
+    c2.y.must_equal(3)
+    c2.value.must_equal(2)
+
+    c2.x.must_equal(2)
+    c2.y.must_equal(2)
+    c2.value.must_equal(2)
+
+    g = Game.new(:seed => 0)
+    g.move(:up)
+    fc = g.grid.filled_cells
+    p fc
+    c1, c2 = fc
+
+    c1.x.must_equal(0)
+    c1.y.must_equal(0)
+    c1.value.must_equal(4)
+
+    c2.x.must_equal(0)
+    c2.y.must_equal(3)
+    c2.value.must_equal(2)
+
+    g = Game.new(:seed => 0)
+    g.move(:left)
+    fc = g.grid.filled_cells
+    p fc
+    c1, c2 = fc
+
+    c1.x.must_equal(0)
+    c1.y.must_equal(0)
+    c1.value.must_equal(2)
+
+    c2.x.must_equal(0)
+    c2.y.must_equal(3)
+    c2.value.must_equal(2)
+  end
+
 end

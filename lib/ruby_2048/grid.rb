@@ -46,6 +46,17 @@ module Ruby2048
       @cells.flatten.select{|c| !c.available? }
     end
 
+    public
+    def move_cells(direction)
+      case direction
+      when :up
+      when :down
+      when :left
+      when :right
+      else
+        raise ArgumentError.new("Invalid direction provided: #{direction}")
+      end
+    end
   end
 end
 

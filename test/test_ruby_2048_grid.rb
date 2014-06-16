@@ -34,4 +34,25 @@ class TestRuby2048Game < MiniTest::Unit::TestCase
     c.x.must_equal(0)
     c.y.must_equal(3)
   end
+
+  def test_grid_moves_tiles_right
+    prng = Random.new(0)
+    g = Grid.new(:prng => prng)
+    g.insert_tile(2, 0, 3)
+    g.insert_tile(2, 0, 0)
+
+    g.move_cells(:right)
+    fc = g.filled_cells
+    p fc
+    c1, c2 = fc
+
+    c1.x.must_equal(0)
+    c1.y.must_equal(3)
+    c1.value.must_equal(4)
+
+    c2.x.must_equal(0)
+    c2.y.must_equal(3)
+    c2.value.must_equal(2)
+  end
+  
 end

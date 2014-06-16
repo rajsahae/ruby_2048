@@ -20,8 +20,14 @@ module Ruby2048
     end
     attr_reader :start_tiles, :seed, :grid
 
+    public
     def next_tile
       @prng.rand(1.0) < 0.9 ? 2 : 4
+    end
+
+    public
+    def move(direction)
+      @grid.move_cells(direction)
     end
 
     private
