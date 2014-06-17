@@ -34,7 +34,11 @@ module Ruby2048
     end
 
     public
-    def insert_tile(num, row, col)
+    # Row, column, number/value
+    def insert_tile(row, col, num)
+      raise ArgumentError.new("Row out of bounds: #{row}") if row >= @size || row < 0
+      raise ArgumentError.new("Col out of bounds: #{col}") if col >= @size || col < 0
+      
       @cells[row, col].value = num
     end
 
@@ -62,7 +66,8 @@ module Ruby2048
     end
 
     public
-    def shift_cells(direction)
+    def shift_cells(direction, renum = true)
+      require 'pp'
 
       case direction
       when :up, :down
@@ -70,18 +75,18 @@ module Ruby2048
         rotate_cells(:right)
 
         if direction == :up
-          shift_cells(:right)
+          shift_cells(:right, false)
         elsif direction == :down
-          shift_cells(:left)
+          shift_cells(:left, false)
         end
 
         rotate_cells(:left)
 
       when :left, :right
 
-        cells = Grid.compact_cells(@cells.to_a)
+        @cells = Grid.compact_cells(@cells.to_a)
 
-        cells.map! do |row|
+        @cells.map! do |row|
           while row.size < @size
             if direction == :left
               row.push(Cell.new(nil, nil, nil))
@@ -92,11 +97,12 @@ module Ruby2048
           row
         end
 
-        @cells = Matrix[*Grid.renumber_cells(cells)]
-
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
       end
+
+      @cells = Matrix[*@cells] if @cells.is_a? Array
+      renumber_cells if renum
 
     end
 
@@ -110,14 +116,12 @@ module Ruby2048
     end
 
     public
-    def self.renumber_cells(cells)
-      cells.size.times do |row|
-        cells.size.times do |col|
-          cells[row][col].row = row
-          cells[row][col].col = col
-        end
+    def renumber_cells
+      @cells.each_with_index do |e, row, col| 
+        e.row = row
+        e.col = col
       end
-      return cells
+      return @cells
     end
 
     public

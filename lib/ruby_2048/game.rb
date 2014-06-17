@@ -36,7 +36,7 @@ module Ruby2048
     def add_start_tiles
       @start_tiles.times do
         cell = @grid.random_cell
-        @grid.insert_tile(next_tile, cell.row, cell.col)
+        @grid.insert_tile(cell.row, cell.col, next_tile)
       end
     end
 

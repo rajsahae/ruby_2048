@@ -2,7 +2,6 @@
 # encoding: UTF-8
 
 require 'minitest_helper'
-require 'pp'
 
 module Ruby2048
 
@@ -44,110 +43,108 @@ module Ruby2048
         [nil, nil, nil, 16]
       ]
         
-      @g.insert_tile(2, 0, 3)
-      @g.insert_tile(2, 0, 0)
-      @g.insert_tile(4, 1, 1)
-      @g.insert_tile(8, 2, 2)
-      @g.insert_tile(16, 3, 3)
+      @g.insert_tile(0, 3, 2)
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(2, 2, 8)
+      @g.insert_tile(3, 3, 16)
       @g.to_a.must_equal(grid)
     end
 
     it "shifts tiles left" do
-      @g.insert_tile(2, 0, 3)
-      @g.insert_tile(2, 3, 3)
+      @g.insert_tile(0, 3, 2)
+      @g.insert_tile(3, 3, 2)
 
-      pp @g.cells.to_a
       @g.send(:shift_cells, :left)
-      pp @g.cells.to_a
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 0))
-      fc.must_include(Cell.new(2, 3, 0))
+      fc.must_include(Cell.new(0, 0, 2))
+      fc.must_include(Cell.new(3, 0, 2))
     end
 
     it "shifts staggered tiles left" do
-      @g.insert_tile(4, 0, 3)
-      @g.insert_tile(2, 0, 1)
+      @g.insert_tile(0, 3, 4)
+      @g.insert_tile(0, 1, 2)
 
       @g.send(:shift_cells, :left)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 0))
-      fc.must_include(Cell.new(4, 0, 1))
+      fc.must_include(Cell.new(0, 0, 2))
+      fc.must_include(Cell.new(0, 1, 4))
     end
 
     it "shifts tiles right" do
-      @g.insert_tile(2, 0, 0)
-      @g.insert_tile(4, 2, 0)
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(2, 0, 4)
 
       @g.send(:shift_cells, :right)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 3))
-      fc.must_include(Cell.new(4, 2, 3))
+      fc.must_include(Cell.new(0, 3, 2))
+      fc.must_include(Cell.new(2, 3, 4))
     end
 
     it "shifts staggered tiles right" do
-      @g.insert_tile(2, 0, 0)
-      @g.insert_tile(4, 0, 2)
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 2, 4)
 
       @g.send(:shift_cells, :right)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 2))
-      fc.must_include(Cell.new(4, 0, 3))
+      fc.must_include(Cell.new(0, 2, 2))
+      fc.must_include(Cell.new(0, 3, 4))
     end
 
     it "shifts tiles up" do
-      @g.insert_tile(2, 1, 3)
+      @g.insert_tile(1, 3, 2)
       @g.insert_tile(2, 2, 2)
 
       @g.send(:shift_cells, :up)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 2))
-      fc.must_include(Cell.new(2, 0, 3))
+      fc.must_include(Cell.new(0, 2, 2))
+      fc.must_include(Cell.new(0, 3, 2))
     end
 
     it "shifts staggered tiles up" do
-      @g.insert_tile(2, 1, 3)
-      @g.insert_tile(4, 3, 3)
+      @g.insert_tile(1, 3, 2)
+      @g.insert_tile(3, 3, 4)
 
       @g.send(:shift_cells, :up)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 0, 3))
-      fc.must_include(Cell.new(4, 1, 3))
+      fc.must_include(Cell.new(0, 3, 2))
+      fc.must_include(Cell.new(1, 3, 4))
     end
 
     it "shifts tiles down" do
-      @g.insert_tile(2, 1, 1)
-      @g.insert_tile(2, 2, 0)
+      @g.insert_tile(1, 1, 2)
+      @g.insert_tile(2, 0, 2)
 
       @g.send(:shift_cells, :down)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 3, 1))
-      fc.must_include(Cell.new(2, 3, 0))
+      fc.must_include(Cell.new(3, 1, 2))
+      fc.must_include(Cell.new(3, 0, 2))
     end
 
     it "shifts staggered tiles down" do
-      @g.insert_tile(2, 1, 1)
-      @g.insert_tile(4, 2, 1)
+      @g.insert_tile(1, 1, 2)
+      @g.insert_tile(2, 1, 4)
 
       @g.send(:shift_cells, :down)
 
       fc = @g.filled_cells
       fc.size.must_equal(2)
-      fc.must_include(Cell.new(2, 2, 1))
-      fc.must_include(Cell.new(4, 3, 1))
+      fc.must_include(Cell.new(2, 1, 2))
+      fc.must_include(Cell.new(3, 1, 4))
     end
 
     it "combines tiles left" do
@@ -164,6 +161,15 @@ module Ruby2048
 
     it "combines tiles down" do
       assert false
+    end
+
+    it "raises an error if you try to insert a tile out of bounds" do
+      lambda { @g.insert_tile(4, 1, nil) }.must_raise(ArgumentError)
+      lambda { @g.insert_tile(1, 4, nil) }.must_raise(ArgumentError)
+      lambda { @g.insert_tile(4, 4, nil) }.must_raise(ArgumentError)
+      lambda { @g.insert_tile(1, -1, nil) }.must_raise(ArgumentError)
+      lambda { @g.insert_tile(-1, 1, nil) }.must_raise(ArgumentError)
+      lambda { @g.insert_tile(1, 1, nil) }.must_be_silent
     end
   end
 end
