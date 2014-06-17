@@ -58,28 +58,29 @@ module Ruby2048
 
     public
     def to_a
-      @cells.to_a.map do |row|
-        row.map do |n|
-          n.value
-        end
-      end
+      @cells.collect{|n| n.value }.to_a
     end
 
     public
     def shift_cells(direction)
-      cells = @cells.to_a
 
       case direction
       when :up, :down
+
         rotate_cells(:right)
+
         if direction == :up
           shift_cells(:right)
         elsif direction == :down
           shift_cells(:left)
         end
+
         rotate_cells(:left)
+
       when :left, :right
-        cells = Grid.compact_cells(cells)
+
+        cells = Grid.compact_cells(@cells.to_a)
+
         cells.map! do |row|
           while row.size < @size
             if direction == :left
@@ -90,11 +91,13 @@ module Ruby2048
           end
           row
         end
+
+        @cells = Matrix[*Grid.renumber_cells(cells)]
+
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
       end
 
-      @cells = Grid.renumber_cells(cells)
     end
 
     public
