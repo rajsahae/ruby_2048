@@ -52,9 +52,7 @@ module Ruby2048
       @g.insert_tile(2, 3, 0)
       @g.insert_tile(2, 3, 3)
 
-      p @g.to_a
       @g.send(:shift_cells, :left)
-      p @g.to_a
 
       c1, c2 = @g.filled_cells
 

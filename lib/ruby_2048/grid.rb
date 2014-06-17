@@ -74,10 +74,9 @@ module Ruby2048
       when :up
       when :down
       when :left
-        @size.times do |i|
-          next if @cells[i].all?{|c| c.available? }
-          next if @cells[i].all?{|c| !c.available? }
-
+        @cells.map! do |row|
+          next if row.all?{|c| c.available? } || row.all?{|c| !c.available? }
+          row.sort
         end
       when :right
         @cells.each do |row|
