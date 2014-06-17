@@ -47,7 +47,8 @@ module Ruby2048
     end
 
     public
-    def move_cells(direction)
+    def combine_cells(direction)
+
       case direction
       when :up
       when :down
@@ -55,6 +56,50 @@ module Ruby2048
       when :right
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
+      end
+    end
+
+    public
+    def to_a
+      @cells.map do |row|
+        row.map do |cell|
+          cell.value
+        end
+      end
+    end
+
+    public
+    def shift_cells(direction)
+      case direction
+      when :up
+      when :down
+      when :left
+        @size.times do |i|
+          next if @cells[i].all?{|c| c.available? }
+          next if @cells[i].all?{|c| !c.available? }
+
+        end
+      when :right
+        @cells.each do |row|
+          next if row.all?{|c| c.available?}
+          while row.last.available?
+            row.unshift(row.pop)
+          end
+        end
+      else
+        raise ArgumentError.new("Invalid direction provided: #{direction}")
+      end
+
+      renumber_cells
+    end
+
+    private
+    def renumber_cells
+      @size.times do |y|
+        @size.times do |x|
+          @cells[y][x].x = x
+          @cells[y][x].y = y
+        end
       end
     end
   end

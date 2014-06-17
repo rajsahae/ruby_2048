@@ -27,7 +27,9 @@ module Ruby2048
 
     public
     def move(direction)
-      @grid.move_cells(direction)
+      @grid.shift_cells(direction)
+      @grid.combine_cells(direction)
+      @grid.to_a
     end
 
     private
