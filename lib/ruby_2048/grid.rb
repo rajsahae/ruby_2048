@@ -2,6 +2,7 @@
 # encoding: UTF-8
 
 require 'ruby_2048/cell'
+require 'matrix'
 
 module Ruby2048
   class Grid
@@ -14,13 +15,9 @@ module Ruby2048
       @size = opts[:size]
       @prng = opts[:prng]
 
-      # Cells are array of arrays with top left (0,0)
-      @cells = Array.new(@size)
-      @size.times do |y|
-        @cells[y] = Array.new(@size)
-        @size.times do |x|
-          @cells[y][x] = Cell.new(x, y, nil)
-        end
+      # Cells are ruby matrix, row/column
+      @cells = Matrix.build(@size) do |row, col|
+        Cell.new(row, col, nil)
       end
     end
     attr_reader :size, :prng, :cells
@@ -33,17 +30,17 @@ module Ruby2048
 
     public
     def available_cells
-      @cells.flatten.select{ |c| c.available? }
+      @cells.to_a.flatten.select{ |c| c.available? }
     end
 
     public
-    def insert_tile(num, x, y)
-      @cells[y][x].value = num
+    def insert_tile(num, row, col)
+      @cells[row, col].value = num
     end
 
     public
     def filled_cells
-      @cells.flatten.select{|c| !c.available? }
+      @cells.to_a.flatten.select{|c| !c.available? }
     end
 
     public
@@ -61,46 +58,73 @@ module Ruby2048
 
     public
     def to_a
-      @cells.map do |row|
-        row.map do |cell|
-          cell.value
+      @cells.to_a.map do |row|
+        row.map do |n|
+          n.value
         end
       end
     end
 
     public
     def shift_cells(direction)
+      cells = @cells.to_a
+
       case direction
-      when :up
-      when :down
-      when :left
-        @cells.map! do |row|
-          next if row.all?{|c| c.available? } || row.all?{|c| !c.available? }
-          row.sort
+      when :up, :down
+        rotate_cells(:right)
+        if direction == :up
+          shift_cells(:right)
+        elsif direction == :down
+          shift_cells(:left)
         end
-      when :right
-        @cells.each do |row|
-          next if row.all?{|c| c.available?}
-          while row.last.available?
-            row.unshift(row.pop)
+        rotate_cells(:left)
+      when :left, :right
+        cells = Grid.compact_cells(cells)
+        cells.map! do |row|
+          while row.size < @size
+            if direction == :left
+              row.push(Cell.new(nil, nil, nil))
+            elsif direction == :right
+              row.unshift(Cell.new(nil, nil, nil))
+            end
           end
+          row
         end
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
       end
 
-      renumber_cells
+      @cells = Grid.renumber_cells(cells)
     end
 
-    private
-    def renumber_cells
-      @size.times do |y|
-        @size.times do |x|
-          @cells[y][x].x = x
-          @cells[y][x].y = y
+    public
+    def rotate_cells(direction)
+      @cells =  if direction == :right
+                  Matrix[*@cells.transpose.to_a.map(&:reverse)]
+                elsif direction == :left
+                  Matrix[*@cells.to_a.map(&:reverse)].transpose
+                end
+    end
+
+    public
+    def self.renumber_cells(cells)
+      cells.size.times do |row|
+        cells.size.times do |col|
+          cells[row][col].row = row
+          cells[row][col].col = col
         end
       end
+      return cells
     end
+
+    public
+    def self.compact_cells(cells)
+      cells.map do |row|
+        next row if row.all?{|c| c.available? } || row.all?{|c| !c.available? }
+        row.inject([]){|m, c| m.push(c) unless c.value.nil?; m }
+      end
+    end
+
   end
 end
 

@@ -48,12 +48,12 @@ module Ruby2048
 
       c1, c2 = fc
 
-      c1.x.must_equal(0)
-      c1.y.must_equal(0)
+      c1.row.must_equal(0)
+      c1.col.must_equal(0)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(0)
-      c2.y.must_equal(3)
+      c2.row.must_equal(3)
+      c2.col.must_equal(0)
       c2.value.must_equal(2)
     end
 =begin

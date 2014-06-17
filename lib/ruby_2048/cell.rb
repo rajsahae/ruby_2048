@@ -2,13 +2,13 @@
 # encoding: UTF-8
 
 module Ruby2048
-  Cell = Struct.new(:x, :y, :value) do
+  Cell = Struct.new(:row, :col, :value) do
     def available?
       value.nil?
     end
 
     def == other_cell
-      other_cell.x == x && other_cell.y == y
+      self.row == other_cell.row && self.col == other_cell.col
     end
 
     def <=> other_cell

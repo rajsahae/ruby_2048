@@ -31,16 +31,16 @@ module Ruby2048
 
     it "gives a random available tile" do
       c = @g.random_cell
-      c.x.must_equal(0)
-      c.y.must_equal(3)
+      c.row.must_equal(3)
+      c.col.must_equal(0)
     end
 
     it "has an array representation" do
       grid = [
-        [2, nil, nil, nil],
+        [2, nil, nil, 2],
         [nil, nil, nil, nil],
         [nil, nil, nil, nil],
-        [2, nil, nil, nil]
+        [nil, nil, nil, nil]
       ]
         
       @g.insert_tile(2, 0, 3)
@@ -49,54 +49,71 @@ module Ruby2048
     end
 
     it "shifts tiles left" do
-      @g.insert_tile(2, 3, 0)
+      @g.insert_tile(2, 0, 3)
       @g.insert_tile(2, 3, 3)
 
       @g.send(:shift_cells, :left)
 
       c1, c2 = @g.filled_cells
 
-      c1.x.must_equal(0)
-      c1.y.must_equal(0)
+      c1.row.must_equal(0)
+      c1.col.must_equal(0)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(0)
-      c2.y.must_equal(3)
+      c2.row.must_equal(3)
+      c2.col.must_equal(0)
       c2.value.must_equal(2)
     end
 
     it "shifts staggered tiles left" do
-      @g.insert_tile(4, 3, 0)
-      @g.insert_tile(2, 1, 0)
+      @g.insert_tile(4, 0, 3)
+      @g.insert_tile(2, 0, 1)
 
       @g.send(:shift_cells, :left)
 
       c1, c2 = @g.filled_cells
 
-      c1.x.must_equal(0)
-      c1.y.must_equal(0)
+      c1.row.must_equal(0)
+      c1.col.must_equal(0)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(1)
-      c2.y.must_equal(0)
+      c2.row.must_equal(0)
+      c2.col.must_equal(1)
       c2.value.must_equal(4)
     end
 
     it "shifts tiles right" do
-      @g.insert_tile(2, 0, 1)
-      @g.insert_tile(2, 2, 2)
+      @g.insert_tile(2, 0, 0)
+      @g.insert_tile(4, 2, 0)
 
       @g.send(:shift_cells, :right)
 
       c1, c2 = @g.filled_cells
 
-      c1.x.must_equal(3)
-      c1.y.must_equal(1)
+      c1.row.must_equal(0)
+      c1.col.must_equal(3)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(3)
-      c2.y.must_equal(2)
-      c2.value.must_equal(2)
+      c2.row.must_equal(2)
+      c2.col.must_equal(3)
+      c2.value.must_equal(4)
+    end
+
+    it "shifts staggered tiles right" do
+      @g.insert_tile(2, 0, 0)
+      @g.insert_tile(4, 0, 2)
+
+      @g.send(:shift_cells, :right)
+
+      c1, c2 = @g.filled_cells
+
+      c1.row.must_equal(0)
+      c1.col.must_equal(2)
+      c1.value.must_equal(2)
+
+      c2.row.must_equal(0)
+      c2.col.must_equal(3)
+      c2.value.must_equal(4)
     end
 
     it "shifts tiles up" do
@@ -107,30 +124,64 @@ module Ruby2048
 
       c1, c2 = @g.filled_cells
 
-      c1.x.must_equal(1)
-      c1.y.must_equal(0)
+      c1.row.must_equal(0)
+      c1.col.must_equal(3)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(2)
-      c2.y.must_equal(0)
+      c2.row.must_equal(0)
+      c2.col.must_equal(2)
       c2.value.must_equal(2)
     end
 
-    it "shifts tiles down" do
-      @g.insert_tile(2, 1, 1)
-      @g.insert_tile(2, 3, 0)
+    it "shifts staggered tiles up" do
+      @g.insert_tile(2, 1, 3)
+      @g.insert_tile(4, 3, 3)
 
       @g.send(:shift_cells, :up)
 
       c1, c2 = @g.filled_cells
 
-      c1.x.must_equal(1)
-      c1.y.must_equal(3)
+      c1.row.must_equal(0)
+      c1.col.must_equal(3)
       c1.value.must_equal(2)
 
-      c2.x.must_equal(3)
-      c2.y.must_equal(3)
+      c2.row.must_equal(1)
+      c2.col.must_equal(3)
+      c2.value.must_equal(4)
+    end
+
+    it "shifts tiles down" do
+      @g.insert_tile(2, 1, 1)
+      @g.insert_tile(2, 2, 0)
+
+      @g.send(:shift_cells, :down)
+
+      c1, c2 = @g.filled_cells
+
+      c1.row.must_equal(3)
+      c1.col.must_equal(1)
+      c1.value.must_equal(2)
+
+      c2.row.must_equal(3)
+      c2.col.must_equal(0)
       c2.value.must_equal(2)
+    end
+
+    it "shifts staggered tiles down" do
+      @g.insert_tile(2, 1, 1)
+      @g.insert_tile(4, 2, 1)
+
+      @g.send(:shift_cells, :down)
+
+      c1, c2 = @g.filled_cells
+
+      c1.row.must_equal(2)
+      c1.col.must_equal(1)
+      c1.value.must_equal(2)
+
+      c2.row.must_equal(3)
+      c2.col.must_equal(1)
+      c2.value.must_equal(4)
     end
 
     it "combines tiles left" do

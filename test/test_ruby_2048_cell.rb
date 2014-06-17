@@ -11,12 +11,12 @@ module Ruby2048
       @cell = Cell.new(0, 0, 2)
     end
 
-    it "should have an x coordinate" do
-      @cell.x.must_equal(0)
+    it "should have an row" do
+      @cell.row.must_equal(0)
     end
 
-    it "should have a y coordinate" do
-      @cell.y.must_equal(0)
+    it "should have a column" do
+      @cell.col.must_equal(0)
     end
 
     it "should have a value" do
