@@ -52,9 +52,73 @@ module Ruby2048
 
       case direction
       when :up
+        @cells.column_size.times do |col|
+          index = 0
+          while index.next < @size
+            current_cell = @cells[index, col]
+            next_cell = @cells[index.next, col]
+
+            if !current_cell.value.nil? && current_cell === next_cell
+              current_cell.value = current_cell.value*2
+              next_cell.value = nil
+              index += 2
+            else
+              index += 1
+            end
+          end
+          shift_cells(:up)
+        end
       when :down
+        @cells.column_size.times do |col|
+          index = @size - 1
+          while index > 0
+            current_cell = @cells[index, col]
+            next_cell = @cells[index - 1, col]
+
+            if !current_cell.value.nil? && current_cell === next_cell
+              current_cell.value = current_cell.value*2
+              next_cell.value = nil
+              index -= 2
+            else
+              index -= 1
+            end
+          end
+          shift_cells(:down)
+        end
       when :left
+        @cells.row_size.times do |row|
+          index = 0
+          while index.next < @size
+            current_cell = @cells[row, index]
+            next_cell = @cells[row, index + 1]
+
+            if !current_cell.value.nil? && current_cell === next_cell
+              current_cell.value = current_cell.value*2
+              next_cell.value = nil
+              index += 2
+            else
+              index += 1
+            end
+          end
+          shift_cells(:left)
+        end
       when :right
+        @cells.row_size.times do |row|
+          index = @size - 1
+          while index > 0
+            current_cell = @cells[row, index]
+            next_cell = @cells[row, index - 1]
+
+            if !current_cell.value.nil? && current_cell === next_cell
+              current_cell.value = current_cell.value*2
+              next_cell.value = nil
+              index -= 2
+            else
+              index -= 1
+            end
+          end
+          shift_cells(:right)
+        end
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
       end

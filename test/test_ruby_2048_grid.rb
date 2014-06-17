@@ -148,19 +148,144 @@ module Ruby2048
     end
 
     it "combines tiles left" do
-      assert false
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 1, 2)
+      @g.insert_tile(0, 2, 2)
+      @g.insert_tile(1, 0, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(1, 2, 2)
+      @g.insert_tile(3, 1, 2)
+
+      @g.combine_cells(:left)
+
+      fc = @g.filled_cells
+      fc.size.must_equal(5)
+      fc.must_include(Cell.new(0, 0, 4))
+      fc.must_include(Cell.new(0, 1, 2))
+      fc.must_include(Cell.new(1, 0, 8))
+      fc.must_include(Cell.new(1, 1, 2))
+      fc.must_include(Cell.new(3, 0, 2))
     end
 
     it "combines tiles right" do
-      assert false
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 1, 2)
+      @g.insert_tile(0, 2, 2)
+      @g.insert_tile(1, 0, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(1, 2, 2)
+      @g.insert_tile(3, 1, 2)
+
+      @g.combine_cells(:right)
+
+      fc = @g.filled_cells
+      fc.size.must_equal(5)
+      fc.must_include(Cell.new(0, 2, 4))
+      fc.must_include(Cell.new(0, 3, 2))
+      fc.must_include(Cell.new(1, 2, 8))
+      fc.must_include(Cell.new(1, 3, 2))
+      fc.must_include(Cell.new(3, 3, 2))
     end
 
     it "combines tiles up" do
-      assert false
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(1, 0, 2)
+      @g.insert_tile(2, 0, 2)
+      @g.insert_tile(0, 1, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(2, 1, 2)
+      @g.insert_tile(3, 1, 2)
+
+      @g.combine_cells(:up)
+
+      fc = @g.filled_cells
+      fc.size.must_equal(4)
+      fc.must_include(Cell.new(0, 0, 4))
+      fc.must_include(Cell.new(1, 0, 2))
+      fc.must_include(Cell.new(0, 1, 8))
+      fc.must_include(Cell.new(1, 1, 4))
     end
 
     it "combines tiles down" do
-      assert false
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(1, 0, 2)
+      @g.insert_tile(2, 0, 2)
+      
+      @g.insert_tile(0, 1, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(2, 1, 2)
+      @g.insert_tile(3, 1, 2)
+
+      @g.combine_cells(:down)
+
+      fc = @g.filled_cells
+      fc.size.must_equal(4)
+      fc.must_include(Cell.new(3, 0, 4))
+      fc.must_include(Cell.new(2, 0, 2))
+      fc.must_include(Cell.new(3, 1, 4))
+      fc.must_include(Cell.new(2, 1, 8))
+    end
+
+    it "does a full round of combines correctly" do
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 1, 2)
+      @g.insert_tile(0, 2, 4)
+      @g.insert_tile(0, 3, 16)
+
+      @g.insert_tile(1, 0, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(1, 2, 16)
+      @g.insert_tile(1, 3, 2)
+
+      @g.insert_tile(2, 0, 4)
+      @g.insert_tile(2, 1, 4)
+      @g.insert_tile(2, 2, 8)
+      @g.insert_tile(2, 3, 8)
+
+      @g.insert_tile(3, 0, 2)
+      @g.insert_tile(3, 1, 4)
+      @g.insert_tile(3, 2, 32)
+      @g.insert_tile(3, 3, 64)
+
+      after_left = [
+        [4, 4, 16, nil],
+        [8, 16, 2, nil],
+        [8, 16, nil, nil],
+        [2, 4, 32, 64]
+      ]
+
+      @g.combine_cells(:left)
+      @g.to_a.must_equal(after_left)
+
+      after_down = [
+        [nil, nil, nil, nil],
+        [4, 4, 16, nil],
+        [16, 32, 2, nil],
+        [2, 4, 32, 64]
+      ]
+
+      @g.combine_cells(:down)
+      @g.to_a.must_equal(after_down)
+
+      after_right = [
+        [nil, nil, nil, nil],
+        [nil, nil, 8, 16],
+        [nil, 16, 32, 2],
+        [2, 4, 32, 64]
+      ]
+
+      @g.combine_cells(:right)
+      @g.to_a.must_equal(after_right)
+
+      after_up = [
+        [2, 16, 8, 16],
+        [nil, 4, 64, 2],
+        [nil, nil, nil, 64],
+        [nil, nil, nil, nil]
+      ]
+
+      @g.combine_cells(:up)
+      @g.to_a.must_equal(after_up)
     end
 
     it "raises an error if you try to insert a tile out of bounds" do
