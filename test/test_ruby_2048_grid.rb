@@ -180,8 +180,8 @@ module Ruby2048
 
       fc = @g.filled_cells
       fc.size.must_equal(5)
-      fc.must_include(Cell.new(0, 2, 4))
-      fc.must_include(Cell.new(0, 3, 2))
+      fc.must_include(Cell.new(0, 2, 2))
+      fc.must_include(Cell.new(0, 3, 4))
       fc.must_include(Cell.new(1, 2, 8))
       fc.must_include(Cell.new(1, 3, 2))
       fc.must_include(Cell.new(3, 3, 2))
@@ -295,6 +295,59 @@ module Ruby2048
       lambda { @g.insert_tile(1, -1, nil) }.must_raise(ArgumentError)
       lambda { @g.insert_tile(-1, 1, nil) }.must_raise(ArgumentError)
       lambda { @g.insert_tile(1, 1, nil) }.must_be_silent
+    end
+
+    it "knows when a sparse board has moves available" do
+      @g.moves_available?.must_equal(true)
+    end
+
+    it "knows when a full board has moves available" do
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 1, 4)
+      @g.insert_tile(0, 2, 2)
+      @g.insert_tile(0, 3, 4)
+
+      @g.insert_tile(1, 0, 4)
+      @g.insert_tile(1, 1, 2)
+      @g.insert_tile(1, 2, 2)
+      @g.insert_tile(1, 3, 2)
+
+      @g.insert_tile(2, 0, 2)
+      @g.insert_tile(2, 1, 4)
+      @g.insert_tile(2, 2, 8)
+      @g.insert_tile(2, 3, 8)
+
+      @g.insert_tile(3, 0, 4)
+      @g.insert_tile(3, 1, 2)
+      @g.insert_tile(3, 2, 4)
+      @g.insert_tile(3, 3, 2)
+
+      @g.moves_available?.must_equal(true)
+    end
+
+    it "knows when the board has no moves available" do
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(0, 1, 4)
+      @g.insert_tile(0, 2, 2)
+      @g.insert_tile(0, 3, 4)
+
+      @g.insert_tile(1, 0, 4)
+      @g.insert_tile(1, 1, 2)
+      @g.insert_tile(1, 2, 4)
+      @g.insert_tile(1, 3, 2)
+
+      @g.insert_tile(2, 0, 2)
+      @g.insert_tile(2, 1, 4)
+      @g.insert_tile(2, 2, 2)
+      @g.insert_tile(2, 3, 4)
+
+      @g.insert_tile(3, 0, 4)
+      @g.insert_tile(3, 1, 2)
+      @g.insert_tile(3, 2, 4)
+      @g.insert_tile(3, 3, 2)
+
+      @g.moves_available?.must_equal(false)
+
     end
   end
 end

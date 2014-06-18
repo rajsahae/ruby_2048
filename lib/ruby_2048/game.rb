@@ -27,17 +27,29 @@ module Ruby2048
 
     public
     def move(direction)
+      return nil if over?
       @grid.shift_cells(direction)
       @grid.combine_cells(direction)
+      insert_random_tile
       @grid.to_a
+    end
+
+    public
+    def over?
+      !@grid.moves_available?
     end
 
     private
     def add_start_tiles
       @start_tiles.times do
-        cell = @grid.random_cell
-        @grid.insert_tile(cell.row, cell.col, next_tile)
+        insert_random_tile
       end
+    end
+
+    private
+    def insert_random_tile
+      cell = @grid.random_cell
+      @grid.insert_tile(cell.row, cell.col, next_tile)
     end
 
   end

@@ -8,7 +8,7 @@ module Ruby2048
     end
 
     def == other_cell
-      self.row == other_cell.row && self.col == other_cell.col
+      self.row == other_cell.row && self.col == other_cell.col && self.value == other_cell.value
     end
 
     def <=> other_cell

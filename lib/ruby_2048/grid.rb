@@ -196,6 +196,27 @@ module Ruby2048
       end
     end
 
+    public
+    def moves_available?
+      @cells.each do |e|
+        # If any cells are empty, return true
+        return true if e.value.nil?
+        neighbors(e).each { |n| return true if e === n }
+      end
+      return false
+    end
+
+    private
+    def neighbors(cell)
+      adjacents = []
+      adjacents << @cells[cell.row - 1, cell.col] unless cell.row == 0
+      adjacents << @cells[cell.row + 1, cell.col] unless cell.row == @size - 1
+      adjacents << @cells[cell.row, cell.col - 1] unless cell.col == 0
+      adjacents << @cells[cell.row, cell.col + 1] unless cell.col == @size - 1
+
+      return adjacents
+    end
+
   end
 end
 

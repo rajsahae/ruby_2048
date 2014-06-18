@@ -37,9 +37,10 @@ module Ruby2048
 
     it "should use the === operator by value" do
       other = Cell.new(1, 1, 4)
+      equal = Cell.new(3, 3, 2)
 
       (@cell === other).wont_equal(true)
-      (@cell === @cell).must_equal(true)
+      (@cell === equal).must_equal(true)
     end
   end
 end

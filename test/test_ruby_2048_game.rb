@@ -46,80 +46,43 @@ module Ruby2048
       ac = @g.grid.available_cells
       ac.count.must_equal(14)
 
-      c1, c2 = fc
-
-      c1.row.must_equal(0)
-      c1.col.must_equal(0)
-      c1.value.must_equal(2)
-
-      c2.row.must_equal(3)
-      c2.col.must_equal(0)
-      c2.value.must_equal(2)
+      fc.must_include(Cell.new(0, 0, 2))
+      fc.must_include(Cell.new(3, 0, 2))
     end
-=begin
-    it "lets you make moves" do
-      @g.must_respond_to(:move)
 
-      @g = Game.new(:seed => 0)
+    it "adds a random tile to the grid after every move" do
       @g.move(:down)
       fc = @g.grid.filled_cells
-      p fc
-      c1, c2 = fc
 
-      c1.x.must_equal(0)
-      c1.y.must_equal(3)
-      c1.value.must_equal(4)
-
-      c2.x.must_equal(0)
-      c2.y.must_equal(3)
-      c2.value.must_equal(2)
-
-      @g = Game.new(:seed => 0)
-      @g.move(:right)
-      p fc
-      fc = @g.grid.filled_cells
-      c1, c2, c3 = fc
-
-      c1.x.must_equal(3)
-      c1.y.must_equal(0)
-      c1.value.must_equal(2)
-
-      c2.x.must_equal(3)
-      c2.y.must_equal(3)
-      c2.value.must_equal(2)
-
-      c2.x.must_equal(2)
-      c2.y.must_equal(2)
-      c2.value.must_equal(2)
-
-      @g = Game.new(:seed => 0)
-      @g.move(:up)
-      fc = @g.grid.filled_cells
-      p fc
-      c1, c2 = fc
-
-      c1.x.must_equal(0)
-      c1.y.must_equal(0)
-      c1.value.must_equal(4)
-
-      c2.x.must_equal(0)
-      c2.y.must_equal(3)
-      c2.value.must_equal(2)
-
-      @g = Game.new(:seed => 0)
-      @g.move(:left)
-      fc = @g.grid.filled_cells
-      p fc
-      c1, c2 = fc
-
-      c1.x.must_equal(0)
-      c1.y.must_equal(0)
-      c1.value.must_equal(2)
-
-      c2.x.must_equal(0)
-      c2.y.must_equal(3)
-      c2.value.must_equal(2)
+      fc.size.must_equal(2)
+      fc.must_include(Cell.new(3, 0, 4))
+      fc.must_include(Cell.new(0, 3, 2))
     end
-=end
+
+    it "knows when the game is over" do
+      @g.over?.must_equal(false)
+
+      @g.grid.insert_tile(0, 0, 2)
+      @g.grid.insert_tile(0, 1, 4)
+      @g.grid.insert_tile(0, 2, 2)
+      @g.grid.insert_tile(0, 3, 4)
+
+      @g.grid.insert_tile(1, 0, 4)
+      @g.grid.insert_tile(1, 1, 2)
+      @g.grid.insert_tile(1, 2, 4)
+      @g.grid.insert_tile(1, 3, 2)
+
+      @g.grid.insert_tile(2, 0, 2)
+      @g.grid.insert_tile(2, 1, 4)
+      @g.grid.insert_tile(2, 2, 2)
+      @g.grid.insert_tile(2, 3, 4)
+
+      @g.grid.insert_tile(3, 0, 4)
+      @g.grid.insert_tile(3, 1, 2)
+      @g.grid.insert_tile(3, 2, 4)
+      @g.grid.insert_tile(3, 3, 2)
+
+      @g.over?.must_equal(true)
+    end
   end
 end
