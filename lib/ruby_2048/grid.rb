@@ -49,6 +49,7 @@ module Ruby2048
 
     public
     def combine_cells(direction)
+      score = 0
 
       case direction
       when :up
@@ -60,6 +61,7 @@ module Ruby2048
 
             if !current_cell.value.nil? && current_cell === next_cell
               current_cell.value = current_cell.value*2
+              score += current_cell.value
               next_cell.value = nil
               index += 2
             else
@@ -77,6 +79,7 @@ module Ruby2048
 
             if !current_cell.value.nil? && current_cell === next_cell
               current_cell.value = current_cell.value*2
+              score += current_cell.value
               next_cell.value = nil
               index -= 2
             else
@@ -94,6 +97,7 @@ module Ruby2048
 
             if !current_cell.value.nil? && current_cell === next_cell
               current_cell.value = current_cell.value*2
+              score += current_cell.value
               next_cell.value = nil
               index += 2
             else
@@ -111,6 +115,7 @@ module Ruby2048
 
             if !current_cell.value.nil? && current_cell === next_cell
               current_cell.value = current_cell.value*2
+              score += current_cell.value
               next_cell.value = nil
               index -= 2
             else
@@ -122,6 +127,8 @@ module Ruby2048
       else
         raise ArgumentError.new("Invalid direction provided: #{direction}")
       end
+
+      return score
     end
 
     public

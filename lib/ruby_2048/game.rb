@@ -15,10 +15,11 @@ module Ruby2048
       @seed = opts[:seed]
       @prng = Random.new(@seed)
       @grid = Grid.new(:prng => @prng)
+      @score = 0
 
       add_start_tiles
     end
-    attr_reader :start_tiles, :seed, :grid
+    attr_reader :start_tiles, :seed, :grid, :score
 
     public
     def next_tile
@@ -29,7 +30,7 @@ module Ruby2048
     def move(direction)
       return nil if over?
       @grid.shift_cells(direction)
-      @grid.combine_cells(direction)
+      @score += @grid.combine_cells(direction)
       insert_random_tile
       @grid.to_a
     end
@@ -37,6 +38,12 @@ module Ruby2048
     public
     def over?
       !@grid.moves_available?
+    end
+
+    public
+    def have_2048?
+      @grid.cells.each{|c| next if c.value.nil?; return true if c.value >= 2048}
+      return false
     end
 
     private

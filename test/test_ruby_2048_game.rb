@@ -84,5 +84,17 @@ module Ruby2048
 
       @g.over?.must_equal(true)
     end
+
+    it "increases score on a combining move" do
+      @g.score.must_equal(0)
+      @g.move(:down)
+      @g.score.must_equal(4)
+    end
+
+    it "knows when the player has reached 2048" do
+      @g.grid.insert_tile(2, 2, 2048)
+      @g.have_2048?.must_equal(true)
+    end
+
   end
 end

@@ -226,6 +226,19 @@ module Ruby2048
       fc.must_include(Cell.new(2, 1, 8))
     end
 
+    it "combining tiles returns the combined score" do
+      @g.insert_tile(0, 0, 2)
+      @g.insert_tile(1, 0, 2)
+      @g.insert_tile(2, 0, 2)
+      
+      @g.insert_tile(0, 1, 4)
+      @g.insert_tile(1, 1, 4)
+      @g.insert_tile(2, 1, 2)
+      @g.insert_tile(3, 1, 2)
+
+      @g.combine_cells(:down).must_equal(16)
+    end
+
     it "does a full round of combines correctly" do
       @g.insert_tile(0, 0, 2)
       @g.insert_tile(0, 1, 2)
