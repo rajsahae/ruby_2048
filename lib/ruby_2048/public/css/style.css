@@ -1,3 +1,7 @@
+body {
+  margin: auto;
+}
+
 td {
   border: solid;
   height: 50px;
@@ -8,4 +12,23 @@ td {
 
 ul {
   list-style: none;
+}
+
+li {
+  background: grey;
+  border: solid 3px black;
+  text-align: center;
+  display: inline;
+  margin-left: 10px;
+  margin-right: 10px;
+  width: 50px;
+}
+
+li, a {
+  color: black;
+  text-decoration: none;
+}
+
+li, a:visited {
+  color: black;
 }
