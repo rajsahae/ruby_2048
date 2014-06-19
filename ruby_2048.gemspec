@@ -1,4 +1,6 @@
-# coding: utf-8
+#!/usr/bin/env ruby
+# encoding: UTF-8
+
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require 'ruby_2048/version'
@@ -25,3 +27,4 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'sinatra'
   spec.add_dependency 'markaby'
 end
+
