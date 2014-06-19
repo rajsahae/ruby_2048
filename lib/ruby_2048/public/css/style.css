@@ -1,5 +1,7 @@
 body {
+  width: 500;
   margin: auto;
+  margin-top: 50px;
 }
 
 td {
@@ -15,20 +17,20 @@ ul {
 }
 
 li {
-  background: grey;
-  border: solid 3px black;
+  background: black;
   text-align: center;
   display: inline;
   margin-left: 10px;
   margin-right: 10px;
   width: 50px;
+  border: solid 3px black;
 }
 
 li, a {
-  color: black;
+  color: white;
   text-decoration: none;
 }
 
 li, a:visited {
-  color: black;
+  color: white;
 }

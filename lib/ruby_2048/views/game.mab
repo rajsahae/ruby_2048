@@ -6,6 +6,7 @@ html do
 
   body do
 
+    h1 { "2048" }
     h2 { "Game #{@id}" }
     h2 { "Score: #{@game.score}" }
 
