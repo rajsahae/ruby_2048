@@ -362,5 +362,6 @@ module Ruby2048
       @g.moves_available?.must_equal(false)
 
     end
+
   end
 end

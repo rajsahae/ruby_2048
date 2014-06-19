@@ -73,8 +73,20 @@ get '/play/:id/:direction/?' do |id, direction|
     "You did not provide a valid direction: #{direction}"
   else
     @game.move(direction.to_sym)
-    redirect "/play/#{@id}"
+
+    if @game.over?
+      redirect "/gameover/#{@id}"
+    else
+      redirect "/play/#{@id}"
+    end
   end
+end
+
+get '/gameover/:id/?' do |id|
+  @id = id
+  @game = settings.games[@id]
+
+  markaby :gameover
 end
 
 not_found do

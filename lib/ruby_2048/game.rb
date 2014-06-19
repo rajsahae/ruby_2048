@@ -32,9 +32,16 @@ module Ruby2048
     public
     def move(direction)
       return nil if over?
+
+      previous = @grid.to_a
+
       @grid.shift_cells(direction)
       @score += @grid.combine_cells(direction)
-      insert_random_tile
+
+      current = @grid.to_a
+
+      insert_random_tile if previous != current
+      
       @grid.to_a
     end
 
@@ -53,7 +60,8 @@ module Ruby2048
       {
         :player => @name,
         :game => @grid.to_a,
-        :score => @score
+        :score => @score,
+        :gameover => over?
       }
     end
 

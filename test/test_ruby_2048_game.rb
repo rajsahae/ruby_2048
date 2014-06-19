@@ -97,7 +97,7 @@ module Ruby2048
     end
 
     it "returns a json representation of itself" do
-      json = '{"player":"","game":[[2,null,null,null],[null,null,null,null],[null,null,null,null],[2,null,null,null]],"score":0}'
+      json = '{"player":"","game":[[2,null,null,null],[null,null,null,null],[null,null,null,null],[2,null,null,null]],"score":0,"gameover":false}'
       @g.to_json.must_equal(json)
     end
 
@@ -111,9 +111,39 @@ module Ruby2048
           [2,nil,nil,nil]
         ],
         :score => 0,
+        :gameover => false
       }
 
       @g.to_hash.must_equal(hsh)
+    end
+
+    it "shouldn't add a tile if no move was made" do
+      board_left = [
+        [2, nil, nil, nil],
+        [2, nil, nil, nil],
+        [2, nil, nil, nil],
+        [2, nil, nil, nil]
+      ]
+
+      board_right = [
+        [nil, nil, nil, 2],
+        [  2, nil, nil, 2],
+        [nil, nil, nil, 2],
+        [nil, nil, nil, 2]
+      ]
+
+      @g.grid.insert_tile(1, 0, 2)
+      @g.grid.insert_tile(2, 0, 2)
+
+      @g.grid.to_a.must_equal(board_left)
+      @g.grid.filled_cells.size.must_equal(4)
+      @g.move(:left)
+      @g.grid.to_a.must_equal(board_left)
+      @g.grid.filled_cells.size.must_equal(4)
+
+      @g.move(:right)
+      @g.grid.to_a.must_equal(board_right)
+      @g.grid.filled_cells.size.must_equal(5)
     end
 
   end
