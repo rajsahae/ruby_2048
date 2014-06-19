@@ -1,6 +1,8 @@
 # Ruby2048
 
-TODO: Write a gem description
+My own implementation of the 2048 game using Ruby.
+It has the data model and a server that can run in a browser or as a command line server.
+Soon, I plan to also include several bots that play the game.
 
 ## Installation
 
@@ -18,7 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+To run the tests: rake test
+
+To run the web server: rake server
 
 ## Contributing
 
