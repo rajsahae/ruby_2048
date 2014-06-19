@@ -2,13 +2,15 @@
 # encoding: UTF-8
 
 require 'ruby_2048/grid'
+require 'json'
 
 module Ruby2048
   class Game
     def initialize(opts = {})
       opts = {
         :tiles => 2,
-        :seed => Random.new_seed
+        :seed => Random.new_seed,
+        :name => ''
       }.merge(opts)
 
       @start_tiles = opts[:tiles]
@@ -16,10 +18,11 @@ module Ruby2048
       @prng = Random.new(@seed)
       @grid = Grid.new(:prng => @prng)
       @score = 0
+      @name = opts[:name]
 
       add_start_tiles
     end
-    attr_reader :start_tiles, :seed, :grid, :score
+    attr_reader :start_tiles, :seed, :grid, :score, :name
 
     public
     def next_tile
@@ -38,6 +41,20 @@ module Ruby2048
     public
     def over?
       !@grid.moves_available?
+    end
+
+    public
+    def to_json
+      JSON.generate(to_hash)
+    end
+
+    public
+    def to_hash
+      {
+        :player => @name,
+        :game => @grid.to_a,
+        :score => @score
+      }
     end
 
     public

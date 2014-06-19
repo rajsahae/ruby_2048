@@ -1,0 +1,31 @@
+html do
+  head do
+    title { "Game #{@id}" }
+    link :rel => 'stylesheet', :type => 'text/css', :href => '/css/style.css'
+  end
+
+  body do
+
+    h2 { "Game #{@id}" }
+    h2 { "Score: #{@game.score}" }
+
+    table do
+      @game.to_hash[:game].each do |row|
+        tr do
+          row.each do |cell|
+            klass = "#{cell}-tile"
+            td.send(klass.to_sym) { cell }
+          end
+        end
+      end
+    end # table
+
+    ul do
+      li { a 'up',    :href => "/play/#{id}/up/"    }
+      li { a 'left',  :href => "/play/#{id}/left/"  }
+      li { a 'right', :href => "/play/#{id}/right/" }
+      li { a 'down',  :href => "/play/#{id}/down/"  }
+    end
+
+  end
+end

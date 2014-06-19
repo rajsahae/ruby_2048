@@ -96,5 +96,25 @@ module Ruby2048
       @g.have_2048?.must_equal(true)
     end
 
+    it "returns a json representation of itself" do
+      json = '{"player":"","game":[[2,null,null,null],[null,null,null,null],[null,null,null,null],[2,null,null,null]],"score":0}'
+      @g.to_json.must_equal(json)
+    end
+
+    it "returns a hash representation of itself" do
+      hsh = {
+        :player => "",
+        :game => [
+          [2,nil,nil,nil],
+          [nil,nil,nil,nil],
+          [nil,nil,nil,nil],
+          [2,nil,nil,nil]
+        ],
+        :score => 0,
+      }
+
+      @g.to_hash.must_equal(hsh)
+    end
+
   end
 end

@@ -6,3 +6,11 @@ Rake::TestTask.new(:test) do |t|
 end
 
 task :default => :test
+
+task :server do
+  system "ruby -I lib lib/ruby_2048/server.rb"
+end
+
+task :shotgun do
+  system "shotgun -I lib lib/ruby_2048/server.rb"
+end

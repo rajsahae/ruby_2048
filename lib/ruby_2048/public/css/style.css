@@ -1,0 +1,11 @@
+td {
+  border: solid;
+  height: 50px;
+  width: 50px;
+  font-size: large;
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+}
