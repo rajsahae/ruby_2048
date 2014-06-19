@@ -74,19 +74,37 @@ get '/play/:id/:direction/?' do |id, direction|
   else
     @game.move(direction.to_sym)
 
-    if @game.over?
-      redirect "/gameover/#{@id}"
+    if settings.encodings[@id] == :json
+      if @game.over?
+        settings.games.delete(@id)
+        settings.encodings.delete(@id)
+      end
+      return @game.to_json
     else
-      redirect "/play/#{@id}"
+      if @game.over?
+        redirect "/gameover/#{@id}"
+      else
+        redirect "/play/#{@id}"
+      end
     end
   end
+
+  settings.games[@id].to_json
 end
 
 get '/gameover/:id/?' do |id|
   @id = id
-  @game = settings.games[@id]
 
-  markaby :gameover
+  if settings.encodings[id].nil? || settings.games[id].nil?
+    "Game #{id} doesn't exist"
+  else
+    @game = settings.games[@id]
+
+    settings.games.delete(@id)
+    settings.encodings.delete(@id)
+
+    markaby :gameover
+  end
 end
 
 not_found do

@@ -14,7 +14,7 @@ module Ruby2048
       }.merge(opts)
 
       @start_tiles = opts[:tiles]
-      @seed = opts[:seed]
+      @seed = opts[:seed].to_i
       @prng = Random.new(@seed)
       @grid = Grid.new(:prng => @prng)
       @score = 0
@@ -61,7 +61,8 @@ module Ruby2048
         :player => @name,
         :game => @grid.to_a,
         :score => @score,
-        :gameover => over?
+        :gameover => over?,
+        :seed => @seed
       }
     end
 
