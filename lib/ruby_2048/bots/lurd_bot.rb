@@ -3,6 +3,7 @@
 
 require 'ruby_2048/server_api'
 require 'json'
+require 'pp'
 
 case ARGV[0]
 when 'heroku'
@@ -27,7 +28,11 @@ hash = {}
 loop do
   json = @api.play(id, moves[index%4])
   hash = JSON.parse(json)
-  p hash
   break if hash['gameover'] == true
   index += 1
 end
+
+puts "Total num movess: #{index}"
+puts "Final score: #{hash['score']}"
+puts "Final board:"
+hash['game'].each { |row| p row }
