@@ -7,3 +7,4 @@ require 'ruby_2048/server'
 require 'minitest/autorun'
 require 'minitest/spec'
 require 'minitest/pride'
+

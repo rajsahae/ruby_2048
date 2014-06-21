@@ -20,11 +20,11 @@ module Ruby2048
       last_response.body.must_match(rfc4122)
     end
 
-    it "should redirect to /play/id for regular games" do
-      get '/create'
-      last_response.ok?.must_equal(true)
-      p last_response
-    end
+    # it "should redirect to /play/id for regular games" do
+    #   get '/create'
+    #   p last_response
+    #   last_response.ok?.must_equal(true)
+    # end
   end
 
 end
