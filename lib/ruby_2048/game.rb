@@ -72,6 +72,11 @@ module Ruby2048
       return false
     end
 
+    public
+    def deep_copy
+      ::Marshal.load(::Marshal.dump(self))
+    end
+
     private
     def add_start_tiles
       @start_tiles.times do

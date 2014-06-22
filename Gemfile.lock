@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     ruby_2048 (0.0.1)
+      curses
       markaby
       sinatra
 
@@ -9,6 +10,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     builder (3.2.2)
+    curses (1.0.1)
     markaby (0.8.0)
       builder
     minitest (5.3.5)

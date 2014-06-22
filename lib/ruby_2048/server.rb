@@ -107,6 +107,24 @@ get '/gameover/:id/?' do |id|
   end
 end
 
+# This will calculate the move and return the new board without
+# actually making the move.
+# Will return json only
+get '/test/:id/:direction/?' do |id, direction|
+  @id = id
+  @game = settings.games[@id]
+
+  if settings.encodings[id].nil? || settings.games[id].nil?
+    "Game #{id} doesn't exist"
+  elsif !['up', 'down', 'left', 'right'].include?(direction)
+    "You did not provide a valid direction: #{direction}"
+  else
+    test_game = @game.deep_copy
+    test_game.move(direction.to_sym)
+    test_game.to_json
+  end
+end
+
 not_found do
   status 404
   'not found'
