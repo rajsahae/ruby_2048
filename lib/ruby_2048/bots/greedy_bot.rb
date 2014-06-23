@@ -4,48 +4,17 @@
 require 'ruby_2048/server_api'
 require 'json'
 
-def best_greedy_move(board)
-  max = [nil, nil, 0]
-  board.size.times do |y|
-    board[y].size.times do |x|
-      next if board[y][x].nil?
-
-      unless y == 0 
-        if board[y][x] == board[y-1][x] 
-          max = [[y,x],[y-1,x],board[y][x]*2] unless max[2] > board[y][x]*2
-        end
-      end
-
-      unless y == board.size - 1 
-        if board[y][x] == board[y+1][x] 
-          max = [[y,x],[y+1,x],board[y][x]*2] unless max[2] > board[y][x]*2
-        end
-      end
-
-      unless x == 0
-        if board[y][x] == board[y][x-1] 
-          max = [[y,x],[y,x-1],board[y][x]*2] unless max[2] > board[y][x]*2
-        end
-      end
-
-      unless x == board.size - 1
-        if board[y][x] == board[y][x+1] 
-          max = [[y,x],[y,x+1],board[y][x]*2] unless max[2] > board[y][x]*2
-        end
-      end
-
-    end
+def best_greedy_move(game)
+  current_score = game['score']
+  scores = []
+  moves = %w(up down left right)
+  moves.each do |move|
+    scores.push(@api.test(@id, move)['score'])
   end
-
-  if max[0].nil?
-    return %w(up down left right)[rand(4)]
-  elsif max[0][0] == max[1][0]
-    # on the same row, move left or right
-    return %w(left right)[rand(2)]
-  elsif max[0][1] == max[1][1]
-    return %w(up down)[rand(2)]
+  if scores.uniq.size == 1
+    return moves[rand(3)]
   else
-    abort "greedy move error: #{max}"
+    return moves[scores.index(scores.max)]
   end
 end
 
@@ -63,19 +32,19 @@ def main
 
   @api = Ruby2048::ServerApi.new(host, port)
 
-  id = @api.create('lurd bot', 'json', 5)
+  @id = @api.create('greedy bot', 'json', 5)
 
   index = 0
   hash = {}
-  json = @api.play(id)
+  json = @api.play(@id)
 
 
   loop do
     hash = JSON.parse(json)
     board = hash['game']
-    move = best_greedy_move(board)
+    move = best_greedy_move(hash)
 
-    json = @api.play(id, move)
+    json = @api.play(@id, move)
     break if hash['gameover'] == true
     index += 1
   end

@@ -53,12 +53,27 @@ module Ruby2048
       URI::HTTP.build(build_hash)
     end
 
+    public
+    def test(id, move)
+      server_get(test_uri(id, move))
+    end
+
+    public
+    def test_uri(id, move)
+      path = ['test', id, move]
+
+      build_hash = {
+        :host => @host,
+        :port => @port,
+        :path => '/' + path.join('/')
+      }
+
+      URI::HTTP.build(build_hash)
+    end
 
     private
     def server_get(uri)
-      resp = Net::HTTP.get(uri)
-      #resp.value
-      #resp.body
+      Net::HTTP.get(uri)
     end
   end
 end
