@@ -28,6 +28,18 @@ describe "smoothness valuation" do
     ]
 
     smoothness_valuation(board).must_equal(662)
+  end
+end
 
+describe "monotonicity valuation" do
+  it "should return the value of a board using monotonicity criteria (sorted)" do
+    board = [
+      [4, 2, 4, nil],
+      [2, 32, nil, nil],
+      [2, 16, 64, 128],
+      [4, 16, nil, nil]
+    ]
+
+    monotonicity_valuation(board).must_equal(9)
   end
 end
